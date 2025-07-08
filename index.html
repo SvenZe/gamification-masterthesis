@@ -3,14 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gamification Prototyp: Last-Mile ESG</title>
-  <script type="module" crossorigin src="/assets/index-CBq4Etex.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-DhkPIPJa.css">
+    <title>Logistik-Lernspiel Prototyp</title>
+    <!-- Tailwind CSS CDN für schnelles Styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Link zur externen CSS-Datei -->
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <h1>Willkommen zum Gamification Prototyp!</h1>
-    <div id="game-container">
-        </div>
+<body class="flex flex-col min-h-screen">
+    <div class="game-container">
+        <header class="bg-blue-600 text-white p-6 rounded-t-xl">
+            <h1 class="text-3xl font-bold text-center">Logistik-Lernspiel: Routenplanung</h1>
+            <p class="text-center text-blue-200 mt-2">Ein Prototyp im Stil der MARTINA-App</p>
+        </header>
 
+        <main class="p-6">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-6">
+                <div class="text-lg font-semibold text-gray-700 mb-4 md:mb-0">
+                    Aktueller Punktestand: <span id="score" class="text-blue-600">0</span>
+                </div>
+                <div class="text-lg font-semibold text-gray-700">
+                    Abgeschlossene Stationen: <span id="completed-nodes-count" class="text-blue-600">0</span> / <span id="total-nodes-count">0</span>
+                </div>
+            </div>
+
+            <div class="map-svg-container relative">
+                <svg id="game-map" class="map-svg" viewBox="0 0 800 600">
+                    <!-- Karte (vereinfacht) -->
+                    <rect x="0" y="0" width="800" height="600" fill="#007bff" rx="24"></rect>
+
+                    <!-- Knotenpunkte (Beispielstädte in Deutschland) -->
+                    <!-- Jeder Kreis ist ein Knoten, der angeklickt werden kann -->
+                    <!-- Daten-Attribute für ID und zugehörige Aufgabe -->
+                    <g id="nodes-group">
+                        <circle id="node-berlin" class="node" cx="620" cy="150" r="15" data-node-id="berlin" data-task-id="task1"></circle>
+                        <text x="620" y="175" class="node-label">Berlin</text>
+
+                        <circle id="node-hamburg" class="node" cx="450" cy="80" r="15" data-node-id="hamburg" data-task-id="task2"></circle>
+                        <text x="450" y="105" class="node-label">Hamburg</text>
+
+                        <circle id="node-koeln" class="node" cx="200" cy="350" r="15" data-node-id="koeln" data-task-id="task3"></circle>
+                        <text x="200" y="375" class="node-label">Köln</text>
+
+                        <circle id="node-muenchen" class="node" cx="600" cy="500" r="15" data-node-id="muenchen" data-task-id="task4"></circle>
+                        <text x="600" y="525" class="node-label">München</text>
+
+                        <circle id="node-frankfurt" class="node" cx="380" cy="380" r="15" data-node-id="frankfurt" data-task-id="task5"></circle>
+                        <text x="380" y="405" class="node-label">Frankfurt</text>
+
+                        <circle id="node-leipzig" class="node" cx="580" cy="280" r="15" data-node-id="leipzig" data-task-id="task6"></circle>
+                        <text x="580" y="305" class="node-label">Leipzig</text>
+
+                        <circle id="node-stuttgart" class="node" cx="400" cy="480" r="15" data-node-id="stuttgart" data-task-id="task7"></circle>
+                        <text x="400" y="505" class="node-label">Stuttgart</text>
+
+                        <circle id="node-dortmund" class="node" cx="250" cy="280" r="15" data-node-id="dortmund" data-task-id="task8"></circle>
+                        <text x="250" y="305" class="node-label">Dortmund</text>
+                    </g>
+
+                    <!-- Linien für Routen (werden dynamisch hinzugefügt) -->
+                </svg>
+            </div>
+
+            <div class="mt-6 flex justify-center space-x-4">
+                <button id="reset-game-btn" class="button-secondary">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005 7V5a1 1 0 011-1h1a1 1 0 110 2H6V3a3 3 0 00-3 3v2a1 1 0 01-1 1H1a1 1 0 01-1-1V3a1 1 0 011-1h3zm14 0a1 1 0 011 1v2a1 1 0 01-1 1h-1a1 1 0 110-2h1V3a1 1 0 00-1-1h-3a1 1 0 010-2h3a3 3 0 013 3v2a1 1 0 01-1 1h-1a1 1 0 01-1-1V3a1 1 0 00-1-1h-3zM4 10a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005 15V13a1 1 0 011-1h1a1 1 0 110 2H6v3a1 1 0 001 1h3a1 1 0 010 2H7a3 3 0 01-3-3v-2a1 1 0 011-1h1a1 1 0 011-1h-1zM14 10a1 1 0 011 1v2a1 1 0 01-1 1h-1a1 1 0 110-2h1v-2a1 1 0 00-1-1h-3a1 1 0 010-2h3a3 3 0 013 3v2a1 1 0 01-1 1h-1a1 1 0 01-1-1V13a1 1 0 00-1-1h-3z" clip-rule="evenodd" />
+                    </svg>
+                    Spiel zurücksetzen
+                </button>
+            </div>
+        </main>
+
+        <!-- Startbildschirm-Overlay -->
+        <div id="start-screen-overlay" class="start-overlay">
+            <h2>Willkommen zum Logistik-Lernspiel!</h2>
+            <p>
+                Tauchen Sie ein in die Welt der Logistik und meistern Sie spannende Herausforderungen.
+                In diesem Spiel übernehmen Sie die Rolle eines Logistikmanagers und optimieren Routen,
+                lösen knifflige Aufgaben zur Ladungssicherung und vielem mehr.
+                Bereit für Ihre Karriere in der Logistik?
+            </p>
+            <button id="start-game-btn" class="button-primary">Spiel starten</button>
+        </div>
+    </div>
+
+    <!-- Modales Fenster für Aufgaben -->
+    <div id="task-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" id="close-modal">&times;</span>
+            <h2 id="modal-title" class="text-2xl font-bold text-gray-800 mb-4">Aufgabe</h2>
+            <p id="modal-description" class="text-gray-600 mb-6"></p>
+            <div id="task-options" class="flex flex-col space-y-3 mb-6">
+                <!-- Optionen werden hier dynamisch eingefügt -->
+            </div>
+            <p id="feedback-message" class="feedback-message"></p>
+            <button id="submit-task-btn" class="button-primary mt-4">Antwort absenden</button>
+            <button id="next-task-btn" class="button-primary mt-4 hidden">Nächste Aufgabe</button>
+        </div>
+    </div>
+
+    <!-- Modales Fenster für Spielende -->
+    <div id="game-over-modal" class="modal">
+        <div class="modal-content">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Spiel beendet!</h2>
+            <p class="text-gray-600 mb-6">Herzlichen Glückwunsch! Sie haben alle Stationen erfolgreich absolviert.</p>
+            <p class="text-xl font-semibold text-gray-700 mb-6">Ihr finaler Punktestand: <span id="final-score" class="text-blue-600">0</span></p>
+            <button id="restart-game-btn" class="button-primary">Neues Spiel starten</button>
+        </div>
+    </div>
+
+    <!-- Link zur externen JavaScript-Datei -->
+    <script src="script.js"></script>
 </body>
 </html>
