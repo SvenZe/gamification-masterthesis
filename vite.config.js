@@ -1,8 +1,10 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  root: 'public', // Setzt das 'public' Verzeichnis als Root für Vite
+  root: 'public',
+
   build: {
-    outDir: '../dist', // Ausgabeordner für den Build (Standard ist 'dist')
+    outDir: '../dist',
+    emptyOutDir: true
   },
 });
