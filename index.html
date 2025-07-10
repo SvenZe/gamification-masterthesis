@@ -4,93 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Logistik-Lernspiel Prototyp</title>
-    <!-- Tailwind CSS CDN für schnelles Styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- Link zur externen CSS-Datei -->
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body class="flex flex-col min-h-screen">
     <div class="game-container">
         <header class="bg-blue-600 text-white p-6 rounded-t-xl">
-            <h1 class="text-3xl font-bold text-center">Logistik-Lernspiel: Routenplanung</h1>
-            <p class="text-center text-blue-200 mt-2">Ein Prototyp im Stil der MARTINA-App</p>
+            <h1 class="text-3xl font-bold text-center">Logistik-Lernspiel</h1>
+            <p class="text-center text-blue-200 mt-2">Routenplanung für ESG-Berichterstattung</p>
         </header>
 
-        <main class="p-6">
+        <!-- coins -->
+        <main class="coins">
             <div class="flex flex-col md:flex-row justify-between items-center mb-6">
                 <div class="text-lg font-semibold text-gray-700 mb-4 md:mb-0">
-                    Aktueller Punktestand: <span id="score" class="text-blue-600">0</span>
-                </div>
-                <div class="text-lg font-semibold text-gray-700">
-                    Abgeschlossene Stationen: <span id="completed-nodes-count" class="text-blue-600">0</span> / <span id="total-nodes-count">0</span>
+                    Verfügbares Guthaben: <span id="remaining-budget" class="text-blue-600">20000</span> €
                 </div>
             </div>
 
+            <!-- Map -->
             <div class="map-svg-container relative">
                 <svg id="game-map" class="map-svg" viewBox="0 0 800 600">
-                    <!-- Karte (vereinfacht) -->
                     <rect x="0" y="0" width="800" height="600" fill="#007bff" rx="24"></rect>
-
-                    <!-- Straßennetz (feste Linien zwischen den Städten) -->
-                    <!-- Diese Linien repräsentieren die möglichen Routen und sind statisch -->
-                    <!-- Horizontal roads -->
-                    <line x1="100" y1="100" x2="700" y2="100" stroke="#0056b3" stroke-width="3" stroke-dasharray="5,5" />
-                    <line x1="100" y1="200" x2="700" y2="200" stroke="#0056b3" stroke-width="3" stroke-dasharray="5,5" />
-                    <line x1="100" y1="300" x2="700" y2="300" stroke="#0056b3" stroke-width="3" stroke-dasharray="5,5" />
-                    <line x1="100" y1="400" x2="700" y2="400" stroke="#0056b3" stroke-width="3" stroke-dasharray="5,5" />
-                    <line x1="100" y1="500" x2="700" y2="500" stroke="#0056b3" stroke-width="3" stroke-dasharray="5,5" />
-
-                    <!-- Vertical roads -->
-                    <line x1="100" y1="100" x2="100" y2="500" stroke="#0056b3" stroke-width="3" stroke-dasharray="5,5" />
-                    <line x1="200" y1="100" x2="200" y2="500" stroke="#0056b3" stroke-width="3" stroke-dasharray="5,5" />
-                    <line x1="300" y1="100" x2="300" y2="500" stroke="#0056b3" stroke-width="3" stroke-dasharray="5,5" />
-                    <line x1="400" y1="100" x2="400" y2="500" stroke="#0056b3" stroke-width="3" stroke-dasharray="5,5" />
-                    <line x1="500" y1="100" x2="500" y2="500" stroke="#0056b3" stroke-width="3" stroke-dasharray="5,5" />
-                    <line x1="600" y1="100" x2="600" y2="500" stroke="#0056b3" stroke-width="3" stroke-dasharray="5,5" />
-                    <line x1="700" y1="100" x2="700" y2="500" stroke="#0056b3" stroke-width="3" stroke-dasharray="5,5" />
-
-
-                    <!-- Knotenpunkte (Beispielstädte in Deutschland) -->
-                    <!-- Jeder Kreis ist ein Knoten, der angeklickt werden kann -->
-                    <!-- Daten-Attribute für ID und zugehörige Aufgabe -->
-                    <g id="nodes-group">
-                        <circle id="node-warehouse" class="node warehouse-node" cx="400" cy="300" r="20" data-node-id="warehouse" data-task-id="task0"></circle>
-                        <text x="400" y="330" class="node-label">Lager</text>
-
-                        <circle id="node-1" class="node" cx="200" cy="100" r="15" data-node-id="node-1" data-task-id="task1"></circle>
-                        <text x="200" y="125" class="node-label">Station 1</text>
-
-                        <circle id="node-2" class="node" cx="600" cy="100" r="15" data-node-id="node-2" data-task-id="task2"></circle>
-                        <text x="600" y="125" class="node-label">Station 2</text>
-
-                        <circle id="node-3" class="node" cx="100" cy="200" r="15" data-node-id="node-3" data-task-id="task3"></circle>
-                        <text x="100" y="225" class="node-label">Station 3</text>
-
-                        <circle id="node-4" class="node" cx="700" cy="200" r="15" data-node-id="node-4" data-task-id="task4"></circle>
-                        <text x="700" y="225" class="node-label">Station 4</text>
-
-                        <circle id="node-5" class="node" cx="200" cy="400" r="15" data-node-id="node-5" data-task-id="task5"></circle>
-                        <text x="200" y="425" class="node-label">Station 5</text>
-
-                        <circle id="node-6" class="node" cx="600" cy="400" r="15" data-node-id="node-6" data-task-id="task6"></circle>
-                        <text x="600" y="425" class="node-label">Station 6</text>
-
-                        <circle id="node-7" class="node" cx="100" cy="500" r="15" data-node-id="node-7" data-task-id="task7"></circle>
-                        <text x="100" y="525" class="node-label">Station 7</text>
-
-                        <circle id="node-8" class="node" cx="400" cy="500" r="15" data-node-id="node-8" data-task-id="task8"></circle>
-                        <text x="400" y="525" class="node-label">Station 8</text>
-                        
-                        <circle id="node-9" class="node" cx="700" cy="500" r="15" data-node-id="node-9" data-task-id="task9"></circle>
-                        <text x="700" y="525" class="node-label">Station 9</text>
-
-                        <circle id="node-10" class="node" cx="500" cy="200" r="15" data-node-id="node-10" data-task-id="task10"></circle>
-                        <text x="500" y="225" class="node-label">Station 10</text>
-                    </g>
-
-                    <!-- Linien für Routen (werden dynamisch hinzugefügt) -->
                 </svg>
+            </div>
+
+            <div class="message-field" class="mt-4 p-3 bg-blue-100 border border-blue-300 text-blue-800 rounded-lg hidden message-field" role="alert">
+                
             </div>
 
             <div class="mt-6 flex justify-center space-x-4">
