@@ -42,6 +42,17 @@ body {
 .node.active {
     fill: #ffc107; /* Gelb für den aktiven Knoten */
 }
+.warehouse-node {
+    fill: #dc3545; /* Rote Farbe für das Lager */
+    stroke: #ffffff; /* Weißer Rand */
+    stroke-width: 3;
+}
+.warehouse-node.active {
+    fill: #ffc107; /* Gelb, wenn aktiv */
+}
+.warehouse-node.completed {
+    fill: #28a745; /* Grün, wenn abgeschlossen */
+}
 .node-label {
     font-size: 10px;
     fill: #333;

@@ -6,7 +6,7 @@ let completedNodes = [];
 let currentNode = null;
 let activeTask = null;
 let nodesData = {}; // Speichert Informationen über alle Knoten
-const totalNodes = 8; // Gesamtzahl der Knoten auf der Karte
+const totalNodes = 11; // Gesamtzahl der Knoten auf der Karte (1 Lager + 10 Stationen)
 let gameStarted = false; // Flag, um den Spielstart zu verfolgen
 
 // DOM-Elemente
@@ -35,6 +35,15 @@ const startGameBtn = document.getElementById('start-game-btn');
 
 // Aufgaben-Definitionen
 const tasks = {
+    task0: { // Aufgabe für das Lager
+        title: "Lager: Start der Tour",
+        description: "Willkommen im Lager! Ihre heutige Tour beginnt hier. Überprüfen Sie Ihr Fahrzeug und Ihre Ladung, bevor Sie losfahren.",
+        options: [
+            { text: "Fahrzeugcheck und Ladungssicherung prüfen", isCorrect: true },
+            { text: "Sofort losfahren, keine Zeit verlieren", isCorrect: false }
+        ],
+        points: 50
+    },
     task1: {
         title: "Ladungssicherung: Grundlagen",
         description: "Sie müssen 5 Paletten auf einem LKW sichern. Welche Methode ist am effektivsten, um ein Verrutschen während der Fahrt zu verhindern?",
@@ -114,6 +123,26 @@ const tasks = {
             { text: "Fahren mit maximaler Geschwindigkeit", isCorrect: false }
         ],
         points: 170
+    },
+    task9: {
+        title: "Bestandsmanagement: Überprüfung",
+        description: "Ein unerwarteter Anstieg der Nachfrage erfordert eine schnelle Bestandsprüfung. Wie stellen Sie sicher, dass die Daten aktuell sind?",
+        options: [
+            { text: "Manuelle Zählung aller Artikel", isCorrect: false },
+            { text: "Nutzung des Lagerverwaltungssystems (LVS) für Echtzeitdaten", isCorrect: true },
+            { text: "Schätzung basierend auf Verkaufszahlen der letzten Woche", isCorrect: false }
+        ],
+        points: 115
+    },
+    task10: {
+        title: "Supply Chain Transparenz: Sendungsverfolgung",
+        description: "Ein wichtiger Kunde fragt nach dem genauen Standort seiner Sendung. Wie können Sie ihm schnell und präzise Auskunft geben?",
+        options: [
+            { text: "Den Fahrer anrufen und fragen", isCorrect: false },
+            { text: "Die Sendungsverfolgung (Tracking & Tracing) im System nutzen", isCorrect: true },
+            { text: "Dem Kunden sagen, dass die Sendung 'unterwegs' ist", isCorrect: false }
+        ],
+        points: 125
     }
 };
 
@@ -126,16 +155,18 @@ function initializeGame() {
     gameStarted = false; // Spiel ist noch nicht gestartet
 
     // Setzt die Gesamtzahl der Knoten im Display
-    totalNodesCountDisplay.textContent = Object.keys(tasks).length;
+    totalNodesCountDisplay.textContent = totalNodes; // Jetzt 11 Knoten
 
     // Setzt alle Knoten auf den Anfangszustand zurück
     document.querySelectorAll('.node').forEach(node => {
         node.classList.remove('completed', 'active');
-        node.style.fill = '#ffffff'; // Setzt die Farbe zurück
+        node.style.fill = '#ffffff'; // Setzt die Standardfarbe zurück
     });
+    // Spezielle Farbe für den Warehouse-Knoten zurücksetzen, falls er nicht aktiv ist
+    document.getElementById('node-warehouse').style.fill = '#dc3545';
 
     // Entfernt alle dynamisch hinzugefügten Linien
-    const existingLines = gameMap.querySelectorAll('line');
+    const existingLines = gameMap.querySelectorAll('line[stroke="#ffc107"]'); // Nur die gelben Routenlinien entfernen
     existingLines.forEach(line => line.remove());
 
     // Deaktiviert die Karte bis zum Spielstart
@@ -156,13 +187,13 @@ function startGame() {
     gameMap.classList.remove('map-disabled');
     nodesGroup.style.pointerEvents = 'auto'; // Aktiviert Klicks auf Knoten
 
-    // Setzt den ersten Knoten (Berlin) als aktiv
-    const firstNodeElement = document.getElementById('node-berlin');
-    firstNodeElement.classList.add('active');
-    firstNodeElement.style.fill = '#ffc107'; // Gelb für den Startknoten
-    currentNode = firstNodeElement.dataset.nodeId;
+    // Setzt den Lager-Knoten als aktiv und als aktuellen Knoten
+    const warehouseNodeElement = document.getElementById('node-warehouse');
+    warehouseNodeElement.classList.add('active');
+    warehouseNodeElement.style.fill = '#ffc107'; // Gelb für den aktiven Lager-Knoten
+    currentNode = warehouseNodeElement.dataset.nodeId;
     
-    // Zeigt direkt die Aufgabe für den Startknoten an
+    // Zeigt direkt die Aufgabe für den Startknoten (Lager) an
     showTaskModal(currentNode);
 }
 
@@ -173,12 +204,15 @@ function updateScoreDisplay() {
 
 // Aktualisiert die Anzeige der abgeschlossenen Knoten
 function updateCompletedNodesDisplay() {
+    // Wenn das Lager der Startknoten ist, zählt es nicht als "abgeschlossene Station" im Sinne der Kundenbesuche
+    // Aber es ist der erste Punkt auf der Route. Wir zählen es als abgeschlossen, sobald seine Aufgabe gelöst ist.
     completedNodesCountDisplay.textContent = completedNodes.length;
 }
 
 // Zeigt das Aufgaben-Modal an
 function showTaskModal(nodeId) {
-    const taskId = document.getElementById(`node-${nodeId}`).dataset.taskId;
+    const nodeElement = document.getElementById(`node-${nodeId}`);
+    const taskId = nodeElement.dataset.taskId;
     activeTask = tasks[taskId];
 
     if (!activeTask) {
@@ -227,7 +261,15 @@ function handleSubmitTask() {
         const nodeElement = document.getElementById(`node-${currentNode}`);
         nodeElement.classList.remove('active');
         nodeElement.classList.add('completed');
-        nodeElement.style.fill = '#28a745'; // Grün für abgeschlossen
+        // Setze die Farbe des Knotens auf Grün, außer es ist das Lager
+        if (currentNode !== 'warehouse') {
+            nodeElement.style.fill = '#28a745'; // Grün für abgeschlossen
+        } else {
+            // Lager behält seine spezielle Farbe, wenn es abgeschlossen ist, oder wird grün, wenn es als "completed" zählt
+            // Für den Prototypen lassen wir es grün werden, um den Abschluss zu zeigen.
+            nodeElement.style.fill = '#28a745';
+        }
+
 
         // Füge den abgeschlossenen Knoten zur Liste hinzu
         if (!completedNodes.includes(currentNode)) {
@@ -292,7 +334,12 @@ nodesGroup.addEventListener('click', (event) => {
 
                 // Aktualisiere den aktiven Knoten
                 prevNodeElement.classList.remove('active');
-                prevNodeElement.style.fill = '#ffffff'; // Setzt die Farbe des vorherigen Knotens zurück
+                if (prevNodeElement.dataset.nodeId !== 'warehouse') { // Lager behält seine Farbe, wenn es nicht aktiv ist
+                    prevNodeElement.style.fill = '#ffffff'; // Setzt die Farbe des vorherigen Knotens zurück
+                } else {
+                    prevNodeElement.style.fill = '#dc3545'; // Lagerfarbe zurücksetzen
+                }
+                
                 target.classList.add('active');
                 target.style.fill = '#ffc107'; // Gelb für den aktiven Knoten
                 currentNode = nodeId;
@@ -308,7 +355,6 @@ nodesGroup.addEventListener('click', (event) => {
             }
         } else {
             // Optional: Zeige eine Nachricht, dass der Knoten bereits abgeschlossen ist
-            // Stattdessen ein kleines Modal oder eine temporäre Nachricht anzeigen
             const tempMessage = document.createElement('div');
             tempMessage.textContent = 'Diese Station wurde bereits abgeschlossen!';
             tempMessage.className = 'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg';

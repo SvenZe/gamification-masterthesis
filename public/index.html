@@ -32,33 +32,61 @@
                     <!-- Karte (vereinfacht) -->
                     <rect x="0" y="0" width="800" height="600" fill="#007bff" rx="24"></rect>
 
+                    <!-- Straßennetz (feste Linien zwischen den Städten) -->
+                    <!-- Diese Linien repräsentieren die möglichen Routen und sind statisch -->
+                    <!-- Horizontal roads -->
+                    <line x1="100" y1="100" x2="700" y2="100" stroke="#0056b3" stroke-width="3" stroke-dasharray="5,5" />
+                    <line x1="100" y1="200" x2="700" y2="200" stroke="#0056b3" stroke-width="3" stroke-dasharray="5,5" />
+                    <line x1="100" y1="300" x2="700" y2="300" stroke="#0056b3" stroke-width="3" stroke-dasharray="5,5" />
+                    <line x1="100" y1="400" x2="700" y2="400" stroke="#0056b3" stroke-width="3" stroke-dasharray="5,5" />
+                    <line x1="100" y1="500" x2="700" y2="500" stroke="#0056b3" stroke-width="3" stroke-dasharray="5,5" />
+
+                    <!-- Vertical roads -->
+                    <line x1="100" y1="100" x2="100" y2="500" stroke="#0056b3" stroke-width="3" stroke-dasharray="5,5" />
+                    <line x1="200" y1="100" x2="200" y2="500" stroke="#0056b3" stroke-width="3" stroke-dasharray="5,5" />
+                    <line x1="300" y1="100" x2="300" y2="500" stroke="#0056b3" stroke-width="3" stroke-dasharray="5,5" />
+                    <line x1="400" y1="100" x2="400" y2="500" stroke="#0056b3" stroke-width="3" stroke-dasharray="5,5" />
+                    <line x1="500" y1="100" x2="500" y2="500" stroke="#0056b3" stroke-width="3" stroke-dasharray="5,5" />
+                    <line x1="600" y1="100" x2="600" y2="500" stroke="#0056b3" stroke-width="3" stroke-dasharray="5,5" />
+                    <line x1="700" y1="100" x2="700" y2="500" stroke="#0056b3" stroke-width="3" stroke-dasharray="5,5" />
+
+
                     <!-- Knotenpunkte (Beispielstädte in Deutschland) -->
                     <!-- Jeder Kreis ist ein Knoten, der angeklickt werden kann -->
                     <!-- Daten-Attribute für ID und zugehörige Aufgabe -->
                     <g id="nodes-group">
-                        <circle id="node-berlin" class="node" cx="620" cy="150" r="15" data-node-id="berlin" data-task-id="task1"></circle>
-                        <text x="620" y="175" class="node-label">Berlin</text>
+                        <circle id="node-warehouse" class="node warehouse-node" cx="400" cy="300" r="20" data-node-id="warehouse" data-task-id="task0"></circle>
+                        <text x="400" y="330" class="node-label">Lager</text>
 
-                        <circle id="node-hamburg" class="node" cx="450" cy="80" r="15" data-node-id="hamburg" data-task-id="task2"></circle>
-                        <text x="450" y="105" class="node-label">Hamburg</text>
+                        <circle id="node-1" class="node" cx="200" cy="100" r="15" data-node-id="node-1" data-task-id="task1"></circle>
+                        <text x="200" y="125" class="node-label">Station 1</text>
 
-                        <circle id="node-koeln" class="node" cx="200" cy="350" r="15" data-node-id="koeln" data-task-id="task3"></circle>
-                        <text x="200" y="375" class="node-label">Köln</text>
+                        <circle id="node-2" class="node" cx="600" cy="100" r="15" data-node-id="node-2" data-task-id="task2"></circle>
+                        <text x="600" y="125" class="node-label">Station 2</text>
 
-                        <circle id="node-muenchen" class="node" cx="600" cy="500" r="15" data-node-id="muenchen" data-task-id="task4"></circle>
-                        <text x="600" y="525" class="node-label">München</text>
+                        <circle id="node-3" class="node" cx="100" cy="200" r="15" data-node-id="node-3" data-task-id="task3"></circle>
+                        <text x="100" y="225" class="node-label">Station 3</text>
 
-                        <circle id="node-frankfurt" class="node" cx="380" cy="380" r="15" data-node-id="frankfurt" data-task-id="task5"></circle>
-                        <text x="380" y="405" class="node-label">Frankfurt</text>
+                        <circle id="node-4" class="node" cx="700" cy="200" r="15" data-node-id="node-4" data-task-id="task4"></circle>
+                        <text x="700" y="225" class="node-label">Station 4</text>
 
-                        <circle id="node-leipzig" class="node" cx="580" cy="280" r="15" data-node-id="leipzig" data-task-id="task6"></circle>
-                        <text x="580" y="305" class="node-label">Leipzig</text>
+                        <circle id="node-5" class="node" cx="200" cy="400" r="15" data-node-id="node-5" data-task-id="task5"></circle>
+                        <text x="200" y="425" class="node-label">Station 5</text>
 
-                        <circle id="node-stuttgart" class="node" cx="400" cy="480" r="15" data-node-id="stuttgart" data-task-id="task7"></circle>
-                        <text x="400" y="505" class="node-label">Stuttgart</text>
+                        <circle id="node-6" class="node" cx="600" cy="400" r="15" data-node-id="node-6" data-task-id="task6"></circle>
+                        <text x="600" y="425" class="node-label">Station 6</text>
 
-                        <circle id="node-dortmund" class="node" cx="250" cy="280" r="15" data-node-id="dortmund" data-task-id="task8"></circle>
-                        <text x="250" y="305" class="node-label">Dortmund</text>
+                        <circle id="node-7" class="node" cx="100" cy="500" r="15" data-node-id="node-7" data-task-id="task7"></circle>
+                        <text x="100" y="525" class="node-label">Station 7</text>
+
+                        <circle id="node-8" class="node" cx="400" cy="500" r="15" data-node-id="node-8" data-task-id="task8"></circle>
+                        <text x="400" y="525" class="node-label">Station 8</text>
+                        
+                        <circle id="node-9" class="node" cx="700" cy="500" r="15" data-node-id="node-9" data-task-id="task9"></circle>
+                        <text x="700" y="525" class="node-label">Station 9</text>
+
+                        <circle id="node-10" class="node" cx="500" cy="200" r="15" data-node-id="node-10" data-task-id="task10"></circle>
+                        <text x="500" y="225" class="node-label">Station 10</text>
                     </g>
 
                     <!-- Linien für Routen (werden dynamisch hinzugefügt) -->
