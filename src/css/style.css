@@ -28,37 +28,86 @@ body {
     background-color: #007bff; /* MARTINA-App Blau */
     border-radius: 1.5rem;
 }
-.node {
+
+/*Style for roads*/
+.road-segment {
+    stroke: #0056b3; /* Dunkleres Blau für Straßen */
+    stroke-width: 3;
+    stroke-dasharray: 5,5; /* Gestrichelte Linien */
+    cursor: pointer;
+    transition: stroke 0.2s ease-in-out, stroke-width 0.2s ease-in-out;
+}
+.road-segment:hover {
+    stroke-width: 5;
+}
+.road-segment.active-path {
+    stroke: #ffc107; /* Gelb für aktive/genutzte Route */
+    stroke-width: 5;
+    stroke-dasharray: none; /* Durchgezogene Linie */
+}
+.road-segment.visited {
+    stroke: #28a745; /* Grün für besuchte Straßen */
+    stroke-width: 5;
+    stroke-dasharray: none; /* Durchgezogene Linie */
+}
+.road-segment.warehouse {
+    stroke: #dc3545; /* Rote Farbe für Lagerstraßen */
+    stroke-width: 5;
+    stroke-dasharray: none; /* Durchgezogene Linie */
+}
+
+.node-circle {
+    fill: #ffffff; /* Standardfarbe der Knoten */
+    stroke: #0056b3; /* Randfarbe der Knoten */
+    stroke-width: 2;
     cursor: pointer;
     transition: transform 0.2s ease-in-out, fill 0.2s ease-in-out;
-    fill: #ffffff; /* Standardfarbe der Knoten */
 }
-.node:hover {
+.node-circle:hover {
     transform: scale(1.1);
 }
-.node.completed {
-    fill: #28a745; /* Grün für abgeschlossene Knoten */
+.node-circle.current-position {
+    fill: #ffc107; /* Gelb für den aktuellen Standort des Spielers */
 }
-.node.active {
-    fill: #ffc107; /* Gelb für den aktiven Knoten */
+.node-circle.visited {
+    fill: #28a745; /* Grün für besuchte Zustellpunkte */
+    stroke: #28a745;
 }
-.warehouse-node {
+.warehouse-node-circle {
     fill: #dc3545; /* Rote Farbe für das Lager */
     stroke: #ffffff; /* Weißer Rand */
     stroke-width: 3;
 }
-.warehouse-node.active {
+.warehouse-node-circle.current-position {
     fill: #ffc107; /* Gelb, wenn aktiv */
 }
-.warehouse-node.completed {
-    fill: #28a745; /* Grün, wenn abgeschlossen */
+.warehouse-node-circle.visited {
+    fill: #28a745; /* Grün, wenn besucht (Tour abgeschlossen) */
+    stroke: #28a745;
 }
+.node-labels {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    pointer-events: none; /* Verhindert, dass die Labels klickbar sind */
+}
+.node-labels.warehouse {
+    fill: #dc3545; /* Rote Farbe für Lager-Labels */
+}
+.node-labels.visited {
+    fill: #28a745; /* Grüne Farbe für besuchte Zustellpunkte */
+}
+.node-labels.current-position {
+    fill: #ffc107; /* Gelbe Farbe für den aktuellen Standort des Spielers */
+} 
 .node-label {
     font-size: 10px;
     fill: #333;
     text-anchor: middle;
     pointer-events: none; /* Macht den Text nicht klickbar */
 }
+
+/* Modal-Stil */
+
 .modal {
     display: none; /* Standardmäßig versteckt */
     position: fixed;
