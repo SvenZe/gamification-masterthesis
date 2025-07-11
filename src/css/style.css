@@ -28,8 +28,7 @@ body {
     background-color: #007bff; /* MARTINA-App Blau */
     border-radius: 1.5rem;
 }
-
-/*Style for roads*/
+/* Style für die Straßen */
 .road-segment {
     stroke: #0056b3; /* Dunkleres Blau für Straßen */
     stroke-width: 3;
@@ -45,17 +44,8 @@ body {
     stroke-width: 5;
     stroke-dasharray: none; /* Durchgezogene Linie */
 }
-.road-segment.visited {
-    stroke: #28a745; /* Grün für besuchte Straßen */
-    stroke-width: 5;
-    stroke-dasharray: none; /* Durchgezogene Linie */
-}
-.road-segment.warehouse {
-    stroke: #dc3545; /* Rote Farbe für Lagerstraßen */
-    stroke-width: 5;
-    stroke-dasharray: none; /* Durchgezogene Linie */
-}
 
+/* Style für die Knoten */
 .node-circle {
     fill: #ffffff; /* Standardfarbe der Knoten */
     stroke: #0056b3; /* Randfarbe der Knoten */
@@ -85,29 +75,13 @@ body {
     fill: #28a745; /* Grün, wenn besucht (Tour abgeschlossen) */
     stroke: #28a745;
 }
-.node-labels {
-    font-family: 'Inter', sans-serif;
-    font-weight: 600;
-    pointer-events: none; /* Verhindert, dass die Labels klickbar sind */
-}
-.node-labels.warehouse {
-    fill: #dc3545; /* Rote Farbe für Lager-Labels */
-}
-.node-labels.visited {
-    fill: #28a745; /* Grüne Farbe für besuchte Zustellpunkte */
-}
-.node-labels.current-position {
-    fill: #ffc107; /* Gelbe Farbe für den aktuellen Standort des Spielers */
-} 
+
 .node-label {
     font-size: 10px;
     fill: #333;
     text-anchor: middle;
     pointer-events: none; /* Macht den Text nicht klickbar */
 }
-
-/* Modal-Stil */
-
 .modal {
     display: none; /* Standardmäßig versteckt */
     position: fixed;
@@ -211,4 +185,76 @@ body {
 .map-disabled {
     pointer-events: none; /* Deaktiviert Klicks auf der Karte */
     opacity: 0.6;
+}
+
+/* Meldungsfeld */
+.message-field {
+    min-height: 40px; /* Mindesthöhe, um Layout-Sprünge zu vermeiden */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Chatbot Modal Styles */
+.chat-modal-content {
+    max-width: 600px;
+    width: 95%;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    text-align: left; /* Text im Chat linksbündig */
+}
+
+.chat-history {
+    flex-grow: 1;
+    border: 1px solid #e2e8f0;
+    background-color: #f8fafc;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.chat-message {
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.75rem;
+    max-width: 80%;
+    word-wrap: break-word; /* Lange Wörter umbrechen */
+}
+
+.chat-message.user {
+    background-color: #dbeafe; /* Light blue for user messages */
+    align-self: flex-end; /* Align to right */
+    text-align: right;
+}
+
+.chat-message.ai {
+    background-color: #e0f2f7; /* Light cyan for AI messages */
+    align-self: flex-start; /* Align to left */
+    text-align: left;
+}
+
+.chat-loading-indicator {
+    display: inline-block;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 3px solid rgba(0,0,0,.3);
+    border-radius: 50%;
+    border-top-color: #007bff;
+    animation: spin 1s ease-in-out infinite;
+    -webkit-animation: spin 1s ease-in-out infinite;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    to { -webkit-transform: rotate(360deg); }
+}
+@-webkit-keyframes spin {
+    to { -webkit-transform: rotate(360deg); }
 }

@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Logistik-Lernspiel Prototyp</title>
+    <!-- Tailwind CSS CDN für schnelles Styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Link zur externen CSS-Datei (angepasster Pfad) -->
     <link rel="stylesheet" href="../src/css/style.css">
 </head>
 
@@ -16,11 +18,17 @@
             <p class="text-center text-blue-200 mt-2">Routenplanung für ESG-Berichterstattung</p>
         </header>
 
-        <!-- coins -->
-        <main class="coins">
+        <main class="p-6">
             <div class="flex flex-col md:flex-row justify-between items-center mb-6">
                 <div class="text-lg font-semibold text-gray-700 mb-4 md:mb-0">
                     Verfügbares Guthaben: <span id="remaining-budget" class="text-blue-600">20000</span> €
+                </div>
+                <!-- Hinzugefügte Elemente, die in main.js referenziert werden -->
+                <div class="text-lg font-semibold text-gray-700 mb-4 md:mb-0">
+                    Verdientes Guthaben: <span id="earned-credit" class="text-blue-600">0</span>
+                </div>
+                <div class="text-lg font-semibold text-gray-700">
+                    Besuchte Zustellpunkte: <span id="visited-delivery-nodes-count" class="text-blue-600">0</span> / <span id="total-delivery-nodes-count">0</span>
                 </div>
             </div>
 
@@ -28,11 +36,13 @@
             <div class="map-svg-container relative">
                 <svg id="game-map" class="map-svg" viewBox="0 0 800 600">
                     <rect x="0" y="0" width="800" height="600" fill="#007bff" rx="24"></rect>
+                    <!-- Straßennetz und Knotenpunkte werden dynamisch von JavaScript hinzugefügt -->
                 </svg>
             </div>
 
-            <div class="message-field" class="mt-4 p-3 bg-blue-100 border border-blue-300 text-blue-800 rounded-lg hidden message-field" role="alert">
-                
+            <!-- Meldungsfeld -->
+            <div id="message-field" class="mt-4 p-3 bg-blue-100 border border-blue-300 text-blue-800 rounded-lg message-field hidden" role="alert">
+                <!-- Nachrichten werden hier angezeigt -->
             </div>
 
             <div class="mt-6 flex justify-center space-x-4">
@@ -42,6 +52,7 @@
                     </svg>
                     Spiel zurücksetzen
                 </button>
+                <button id="open-chat-btn" class="button-primary">Logistik-Experte ✨</button>
             </div>
         </main>
 
@@ -59,6 +70,7 @@
     </div>
 
     <!-- Modales Fenster für Aufgaben -->
+    <!-- Dieses Modal bleibt im HTML, wird aber im JS nicht für Aufgaben genutzt, sondern als generisches Ankunfts-Modal -->
     <div id="task-modal" class="modal">
         <div class="modal-content">
             <span class="close-button" id="close-modal">&times;</span>
@@ -77,9 +89,25 @@
     <div id="game-over-modal" class="modal">
         <div class="modal-content">
             <h2 class="text-2xl font-bold text-gray-800 mb-4">Spiel beendet!</h2>
-            <p class="text-gray-600 mb-6">Herzlichen Glückwunsch! Sie haben alle Stationen erfolgreich absolviert.</p>
+            <p class="text-gray-600 mb-6">Herzlichen Glückwunsch! Sie haben alle Stationen erfolgreich absolvierten.</p>
             <p class="text-xl font-semibold text-gray-700 mb-6">Ihr finaler Punktestand: <span id="final-score" class="text-blue-600">0</span></p>
             <button id="restart-game-btn" class="button-primary">Neues Spiel starten</button>
+        </div>
+    </div>
+
+    <!-- Modales Fenster für den Chatbot -->
+    <div id="chat-modal" class="modal">
+        <div class="modal-content chat-modal-content">
+            <span class="close-button" id="close-chat-modal">&times;</span>
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Logistik-Experte ✨</h2>
+            <div id="chat-history" class="chat-history mb-4 p-3 bg-gray-100 rounded-lg overflow-y-auto">
+                <!-- Chat-Nachrichten werden hier eingefügt -->
+            </div>
+            <div class="flex">
+                <input type="text" id="chat-input" class="flex-grow p-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Stellen Sie Ihre Frage...">
+                <button id="send-chat-btn" class="button-primary rounded-l-none">Senden</button>
+            </div>
+            <div id="chat-loading" class="mt-2 text-blue-600 hidden">Antwort wird generiert...</div>
         </div>
     </div>
 
